@@ -39,9 +39,15 @@ import queue
 def main():
 #    with open(sys.argv[1]) as fh:     #implicitly open and close the file
     with open(input('Enter file you would like to open: ')) as fh:
-        if (fh): print('Open!')
-        else: print('Not found :-(')
-#        for i in fh:
+        if (fh): 
+            print('Open!')
+            for i in fh:
+                line = i.rstrip()       #strip the EOL
+                print(len(line))
+                print(line)
+        else: 
+            print('Not found :-(')
+#        for i in fh:                   
 #            puzzle = i.rstrip()
 
 
