@@ -51,6 +51,7 @@ def identifyType(c):
            }
 
 def main():
+    file = []
 #    with open(sys.argv[1]) as fh:     #implicitly open and close the file
 #    with open(input('Enter file you would like to open: ')) as fh:
     with open('sample.txt') as fh:
@@ -58,10 +59,12 @@ def main():
             print('Open!')
             for i in fh:
                 line = i.rstrip()       #strip the EOL
-                print(len(line))
+                file.append(line)
                 print(line)
         else: 
             print('Not found :-(')
+        
+        print(file)
 #        for i in fh:                   
 #            puzzle = i.rstrip()
 
