@@ -3,7 +3,7 @@
 
 import sys
 import queue
-             
+            
 #class Cell:
 #    def __init__(self, item):
 #        self._item = item
@@ -36,9 +36,24 @@ import queue
    #     for cell in myCells:
     #        cell.mysubboard = self
 
+def identifyType(c):
+    type = {'function' : 'keyword',
+            'int' : 'keyword',
+            'boolean' : 'keyword',
+            'real' : 'keyword',
+            'if' : 'keyword',
+            'else' : 'keyword',
+            'endif' : 'keyword',
+            'return' : 'keyword',
+            'write' : 'keyword',
+            'read' : 'keyword',
+            'while' : 'keyword',
+           }
+
 def main():
 #    with open(sys.argv[1]) as fh:     #implicitly open and close the file
-    with open(input('Enter file you would like to open: ')) as fh:
+#    with open(input('Enter file you would like to open: ')) as fh:
+    with open('sample.txt') as fh:
         if (fh): 
             print('Open!')
             for i in fh:
