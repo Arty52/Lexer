@@ -49,6 +49,12 @@ def identifyType(c):
             'read' : 'keyword',
             'while' : 'keyword',
            }
+          
+def process_line(file):
+    for i in file:
+        print('for i in file = {}'.format(i))
+        for j in i:
+            print('for j in i = {}'.format(j))
 
 def main():
     file = []
@@ -64,6 +70,7 @@ def main():
         else: 
             print('Not found :-(')
         
+        process_line(file)
         print(file)
 #        for i in fh:                   
 #            puzzle = i.rstrip()
