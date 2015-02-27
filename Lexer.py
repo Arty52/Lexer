@@ -1,5 +1,7 @@
 #Art Grichine
+#Zeed Jarrah
 #ArtGrichine@csu.fullerton.edu
+#ZJarrah@csu.fullerton.edu
 
 import sys
 import queue
@@ -31,10 +33,53 @@ def lexer(todo):
     lexemes = []
     
     for current in range(len(todo)):
-        token = todo[current]
-        if check_seperator(token):
-            tokens.append(token)
+#        token = todo[current]
+        valid = False
+        #handle two character operators
+        if todo[current] == ':' and todo[current+1] == '=':
+            tokens.append('operator')
+            lexemes.append(':=')
+            current += 1
+            valid = True
+        if todo[current] == '=' and todo[current+1] == '>':
+            tokens.append('operator')
+            lexemes.append('=>')
+            current += 1
+            valid = True
+        if todo[current] == '<' and todo[current+1] == '=':
+            tokens.append('operator')
+            lexemes.append('<=')
+            current += 1
+            valid = True
+        if todo[current] == '!' and todo[current+1] == '=':
+            tokens.append('operator')
+            lexemes.append('!=')
+            valid = True
+        
+        #handle two character separators
+        if todo[current] == '@' and todo[current+1] == '@':
+            tokens.append('separator')
+            lexemes.append('@@')
+            current += 1
+            valid = True
+        if todo[current] == '/' and todo[current+1] == '*':
+            tokens.append('separator')
+            lexemes.append('/*')
+            current += 1
+            valid = True
+        if todo[current] == '*' and todo[current+1] == '/':
+            tokens.append('separator')
+            lexemes.append('*/')
+            current += 1
+            valid = True
+        
+        #check for separator           
+        if check_seperator(todo[current]) and valid == False:
+            tokens.append('separator')
+            lexemes.append(todo[current])
+        
     print(tokens)
+    print(lexemes)
     
     #begin
     #   repeat
@@ -67,8 +112,7 @@ def check_seperator(c):
 #output: List of characters that are in text file          
 def process_file():
     file = []
-    todo = []
-    
+    todo = []    
     #open file
 #    with open(sys.argv[1]) as fh:     #implicitly open and close the file from commandline
 #    with open(input('Enter file you would like to open: ')) as fh:
