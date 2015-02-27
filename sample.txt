@@ -1,3 +1,4 @@
-Hello World!
-Whats Cracking?
-Woohoo
+Hello( World!
+Whats Cr\acking?
+Woo[hoo)
+*;:,
