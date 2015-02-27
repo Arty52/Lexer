@@ -27,35 +27,29 @@ def process_file():
     
     #open file
     #    with open(sys.argv[1]) as fh:     #implicitly open and close the file
-    #    with open(input('Enter file you would like to open: ')) as fh:
-    with open('sample.txt') as fh:          #implicitly open and close the file
+    with open(input('Enter file you would like to open: ')) as fh:
+#    with open('sample.txt') as fh:          #implicitly open and close the file
         if (fh): 
             print('Open!')
             for i in fh:
                 line = i.rstrip()       #strip the EOL
                 file.append(line)
-                print(line)
+#                print(line)            #DEBUG
         else: 
             print('Not found :-(')
     
     #for each element 
     for i in file:
-        print('for i in file = {}'.format(i))
+ #       print('for i in file = {}'.format(i))      #DEBUG
         for j in i:
             todo.append(j)
     
     return todo
 
 def main():
-    file = []
     todo = []   #list of characters left to process
-
-        
     todo = process_file()
     print(todo)
-    print(file)
-#        for i in fh:                   
-#            puzzle = i.rstrip()
 
 
 if __name__ == '__main__':
