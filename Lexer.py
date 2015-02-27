@@ -5,7 +5,11 @@
 
 import sys
 import queue
+import itertools, collections
 
+#def consume(iterator, n):
+#    collections.deque(itertools.islice(iterator,n))
+        
 def identifyType(c):
     type = {'function' : 'keyword',
             'int' : 'keyword',
@@ -21,8 +25,6 @@ def identifyType(c):
            }
            
 #dfs for real, int, ident
-#def fsm_operator():
-#    state_table = []
     
 
 #input: list of elements to process
@@ -31,10 +33,11 @@ def lexer(todo):
     #from p46 of slides
     tokens = []
     lexemes = []
+    token = ''
     
     for current in range(len(todo)):
-#        token = todo[current]
         valid = False
+#        print('beginning: {}'.format(current))
         #handle two character operators
         if todo[current] == ':' and todo[current+1] == '=':
             tokens.append('operator')
@@ -54,6 +57,7 @@ def lexer(todo):
         if todo[current] == '!' and todo[current+1] == '=':
             tokens.append('operator')
             lexemes.append('!=')
+            current += 1
             valid = True
         
         #handle two character separators
@@ -65,7 +69,9 @@ def lexer(todo):
         if todo[current] == '/' and todo[current+1] == '*':
             tokens.append('separator')
             lexemes.append('/*')
+ #           consume(iterator, 1)
             current += 1
+#            consume(current,1)
             valid = True
         if todo[current] == '*' and todo[current+1] == '/':
             tokens.append('separator')
@@ -77,9 +83,30 @@ def lexer(todo):
         if check_seperator(todo[current]) and valid == False:
             tokens.append('separator')
             lexemes.append(todo[current])
+            valid = True
+            
+        #check for operator
+        if check_operator(todo[current]) and valid == False:
+            tokens.append('operator')
+            lexemes.append(todo[current])
+            valid = True
         
-    print(tokens)
-    print(lexemes)
+        if valid == False:
+            token += todo[current]
+        
+#        print(token)
+        #check for keyword
+#        if check_keyword(token) and valid == False:
+#            tokens.append('keyword')
+#            lexemes.append(token)
+#            token = ''
+#            valid = True
+        
+#        print('end: {}'.format(current))
+    
+    print('Tokens      Lexemes')
+    for i in range(len(tokens)):
+        print('{}      {}'.format(tokens[i], lexemes[i]))
     
     #begin
     #   repeat
@@ -93,6 +120,19 @@ def lexer(todo):
     #   if token found then 
     #       return token
     #end
+
+#def check_keyword(token):
+#    if token == 'int' or token == 'boolean' or token == 'real' or token == 'if' or token == 'else' or token == 'else' or token == 'endif' or token == 'while' or token == 'return' or token == 'read' or token == 'write' or token == 'true' or token == 'false':
+#      return True
+#    else:
+#        return False
+    
+
+def check_operator(c):
+    if c == '<' or c == '>' or c == '+' or c == '*' or c == '-' or c == '/' or c == '=':
+        return True
+    else:
+        return False
 
 #input: character from todo
 #output:
@@ -116,7 +156,7 @@ def process_file():
     #open file
 #    with open(sys.argv[1]) as fh:     #implicitly open and close the file from commandline
 #    with open(input('Enter file you would like to open: ')) as fh:
-    with open('sample.txt') as fh:          #implicitly open and close the file
+    with open('sample2.txt') as fh:          #implicitly open and close the file
         if (fh): 
             print('Open!')
             for i in fh:
