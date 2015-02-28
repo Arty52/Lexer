@@ -54,65 +54,109 @@ def lexer(todo):
     lexemes = []
     token = ''
     
-    
-    for current in range(len(todo)):
+    while len(todo) > 0:
+#    for current in range(len(todo)):
         valid = False
+        token += todo.pop(0)
 #        print('beginning: {}'.format(current))
         #handle two character operators
-        if todo[current] == ':' and todo[current+1] == '=':
+        if token == ':' and todo[0] == '=':
             tokens.append('operator')
             lexemes.append(':=')
-            current += 1
+            todo.pop(0)
+            token = ''
             valid = True
-        if todo[current] == '=' and todo[current+1] == '>':
+#        if todo[current] == ':' and todo[current+1] == '=':
+#            tokens.append('operator')
+#            lexemes.append(':=')
+#            current += 1
+#            valid = True
+        if token == '=' and todo[0] == '>':
             tokens.append('operator')
             lexemes.append('=>')
-            current += 1
+            todo.pop(0)
+            token = ''
             valid = True
-        if todo[current] == '<' and todo[current+1] == '=':
+#        if todo[current] == '=' and todo[current+1] == '>':
+#            tokens.append('operator')
+#            lexemes.append('=>')
+#            current += 1
+#            valid = True
+        if token == '<' and todo[0] == '=':
             tokens.append('operator')
             lexemes.append('<=')
-            current += 1
+            todo.pop(0)
+            token = ''
             valid = True
-        if todo[current] == '!' and todo[current+1] == '=':
+        # if todo[current] == '<' and todo[current+1] == '=':
+        #     tokens.append('operator')
+        #     lexemes.append('<=')
+        #     current += 1
+        #     valid = True
+        if token == '!' and todo[0] == '=':
             tokens.append('operator')
             lexemes.append('!=')
-            current += 1
+            todo.pop(0)
+            token = ''
             valid = True
+        # if todo[current] == '!' and todo[current+1] == '=':
+        #     tokens.append('operator')
+        #     lexemes.append('!=')
+        #     current += 1
+        #     valid = True
         
         #handle two character separators
-        if todo[current] == '@' and todo[current+1] == '@':
-            tokens.append('separator')
+        if token == '@' and todo[0] == '@':
+            tokens.append('operator')
             lexemes.append('@@')
-            current += 1
+            todo.pop(0)
+            token = ''
             valid = True
-        if todo[current] == '/' and todo[current+1] == '*':
-            tokens.append('separator')
+        # if todo[current] == '@' and todo[current+1] == '@':
+        #     tokens.append('separator')
+        #     lexemes.append('@@')
+        #     current += 1
+        #     valid = True
+        if token == '/' and todo[0] == '*':
+            tokens.append('operator')
             lexemes.append('/*')
- #           consume(iterator, 1)
-            current += 1
-#            consume(current,1)
+            todo.pop(0)
+            token = ''
             valid = True
-        if todo[current] == '*' and todo[current+1] == '/':
-            tokens.append('separator')
+#         if todo[current] == '/' and todo[current+1] == '*':
+#             tokens.append('separator')
+#             lexemes.append('/*')
+#  #           consume(iterator, 1)
+#             current += 1
+# #            consume(current,1)
+#             valid = True
+        if token == '*' and todo[0] == '/':
+            tokens.append('operator')
             lexemes.append('*/')
-            current += 1
+            todo.pop(0)
+            token = ''
             valid = True
+        # if todo[current] == '*' and todo[current+1] == '/':
+        #     tokens.append('separator')
+        #     lexemes.append('*/')
+        #     current += 1
+        #     valid = True
         
         #check for separator           
-        if check_seperator(todo[current]) and valid == False:
+#        if check_seperator(todo[current]) and valid == False:
+        if check_seperator(token) and valid == False:
             tokens.append('separator')
-            lexemes.append(todo[current])
+            lexemes.append(token)
             valid = True
             
         #check for operator
-        if check_operator(todo[current]) and valid == False:
+        if check_operator(token) and valid == False:
             tokens.append('operator')
-            lexemes.append(todo[current])
+            lexemes.append(token)
             valid = True
         
-        if valid == False:
-            token += todo[current]
+        # if valid == False:
+        #     token += todo[current]
         
 #        if token.isdigit:
             
@@ -192,7 +236,7 @@ def process_file():
     
     #for each element 
     for i in file:
- #       print('for i in file = {}'.format(i))      #DEBUG
+        print(i)      #DEBUG
         for j in i:
             todo.append(j)
     
