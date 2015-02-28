@@ -7,6 +7,8 @@ import sys
 import queue
 import itertools, collections
 
+#Todo: find a way to incriment iterator in for loop
+
 #def consume(iterator, n):
 #    collections.deque(itertools.islice(iterator,n))
         
@@ -25,6 +27,23 @@ def identifyType(c):
            }
            
 #dfs for real, int, ident
+
+def fsm_int(state, omega):
+    table = [[2,2,2,2,2,2,2,2,2,2,3],
+             [1,1,1,1,1,1,1,1,1,1,3],
+             [1,1,1,1,1,1,1,1,1,1,1]]
+#    state = 1       #starting state
+    for i in omega:
+        if i.isdigit: 
+            col = int(i)
+        else:
+            col = 10
+        state = table[state, col]
+    if state == 2:  
+        return 1
+    else:
+        return 0
+    
     
 
 #input: list of elements to process
@@ -34,6 +53,7 @@ def lexer(todo):
     tokens = []
     lexemes = []
     token = ''
+    
     
     for current in range(len(todo)):
         valid = False
@@ -94,6 +114,10 @@ def lexer(todo):
         if valid == False:
             token += todo[current]
         
+#        if token.isdigit:
+            
+        
+        
 #        print(token)
         #check for keyword
 #        if check_keyword(token) and valid == False:
@@ -122,7 +146,7 @@ def lexer(todo):
     #end
 
 #def check_keyword(token):
-#    if token == 'int' or token == 'boolean' or token == 'real' or token == 'if' or token == 'else' or token == 'else' or token == 'endif' or token == 'while' or token == 'return' or token == 'read' or token == 'write' or token == 'true' or token == 'false':
+#    if token == 'int' or token == 'boolean' or token == 'real' or token == 'if' or token == 'else' or token == 'else' or token == 'endif' or token == 'while' or token == 'return' or token == 'read' or token == 'write' or token == 'true' or token == 'false' or token == 'function':
 #      return True
 #    else:
 #        return False
