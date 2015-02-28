@@ -57,7 +57,13 @@ def lexer(todo):
     while len(todo) > 0:
 #    for current in range(len(todo)):
         valid = False
+        
+        #if the top of the stack contains a space, pop it off
+        while todo[0].isspace():
+            todo.pop(0)
+        
         token += todo.pop(0)
+        
 #        print('beginning: {}'.format(current))
         #handle two character operators
         if token == ':' and todo[0] == '=':
@@ -147,12 +153,14 @@ def lexer(todo):
         if check_seperator(token) and valid == False:
             tokens.append('separator')
             lexemes.append(token)
+            token = ''
             valid = True
             
         #check for operator
         if check_operator(token) and valid == False:
             tokens.append('operator')
             lexemes.append(token)
+            token = ''
             valid = True
         
         # if valid == False:
@@ -171,7 +179,7 @@ def lexer(todo):
 #            valid = True
         
 #        print('end: {}'.format(current))
-    
+    print(token)
     print('Tokens      Lexemes')
     for i in range(len(tokens)):
         print('{}      {}'.format(tokens[i], lexemes[i]))
@@ -224,7 +232,7 @@ def process_file():
     #open file
 #    with open(sys.argv[1]) as fh:     #implicitly open and close the file from commandline
 #    with open(input('Enter file you would like to open: ')) as fh:
-    with open('sample2.txt') as fh:          #implicitly open and close the file
+    with open('sample3.txt') as fh:          #implicitly open and close the file
         if (fh): 
             print('Open!')
             for i in fh:
