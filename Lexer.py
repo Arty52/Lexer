@@ -38,11 +38,12 @@ def fsm_int(state, omega):
             col = int(i)
         else:
             col = 10
-        state = table[state, col]
-    if state == 2:  
-        return 1
+        state = table[state][col]
+        print('new state: {}'.format(state))
+    if state == 1:  
+        return True
     else:
-        return 0
+        return False
     
     
 
@@ -53,6 +54,7 @@ def lexer(todo):
     tokens = []
     lexemes = []
     token = ''
+    state = 1
     
     while len(todo) > 0:
 #    for current in range(len(todo)):
@@ -66,7 +68,7 @@ def lexer(todo):
         
 #        print('beginning: {}'.format(current))
         #handle two character operators
-        if todo:
+        if todo:                                    #if todo not empty
             if token == ':' and todo[0] == '=':
                 tokens.append('operator')
                 lexemes.append(':=')
@@ -119,18 +121,30 @@ def lexer(todo):
         
             #check for separator           
     #        if check_seperator(todo[current]) and valid == False:
-            if check_seperator(token) and valid == False:
-                tokens.append('separator')
-                lexemes.append(token)
-                token = ''
-                valid = True
+        if check_seperator(token) and valid == False:
+            tokens.append('separator')
+            lexemes.append(token)
+            token = ''
+            valid = True
             
             #check for operator
-            if check_operator(token) and valid == False:
-                tokens.append('operator')
-                lexemes.append(token)
-                token = ''
-                valid = True
+        if check_operator(token) and valid == False:
+            tokens.append('operator')
+            lexemes.append(token)
+            token = ''
+            valid = True
+            
+            # if fsm_int(state,token):
+ #                print(state)
+ #            else:
+ #                print('not int')
+                    
+        if fsm_int(state, token) and valid == False:
+            print('fsm_TRUE, valid_False!')
+            tokens.append('integer')
+            lexemes.append(token)
+            token = ''
+            valid = True
         
         # if valid == False:
         #     token += todo[current]
@@ -146,7 +160,7 @@ def lexer(todo):
            valid = True
         
 #        print('end: {}'.format(current))
-    print(token)
+    print('Tokens Remains: {}'.format(token))
     print('Tokens      Lexemes')
     for i in range(len(tokens)):
         print('{}      {}'.format(tokens[i], lexemes[i]))
@@ -199,7 +213,7 @@ def process_file():
     #open file
 #    with open(sys.argv[1]) as fh:     #implicitly open and close the file from commandline
 #    with open(input('Enter file you would like to open: ')) as fh:
-    with open('sample4.txt') as fh:          #implicitly open and close the file
+    with open('sample.txt') as fh:          #implicitly open and close the file
         if (fh): 
             print('Open!')
             for i in fh:
