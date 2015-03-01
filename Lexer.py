@@ -10,6 +10,8 @@ from collections import deque
            
 #dfs for real, int, ident
 
+#input: list of elements to process and current machine state
+#output: machine state value
 def fsm_digits(omega, state):
     table = [[0,0,0,0,0,0,0,0,0,0,2,1],
              [1,1,1,1,1,1,1,1,1,1,1,1],
@@ -27,18 +29,40 @@ def fsm_digits(omega, state):
     
     return state        
 
-#input: list of elements to process
+#input: list of elements to process and current machine state
+#output: machine state value
+def fsm_identifier(omega, state):
+    table = [[1,0,0,3],
+             [1,2,2,3],
+             [1,2,2,4],
+             [3,3,3,3],
+             [4,4,4,4]]
+             
+    for i in omega:
+        if i.isalpha():
+            col = 0
+        elif i.isdigit():
+            col = 1
+        elif i == '_':
+            col = 2
+        else:
+            col = 3
+        state = table[state][col]
+    
+    return state     
+    
+#input: list of elements to process and current machine state
 #output: two lists, tokens and lexemes
 def lexer(todo):
     #from p46 of slides
     tokens = []
     lexemes = []
     token = ''
-    state = 0               #starting state
     
     while len(todo) > 0:
 #    for current in range(len(todo)):
         valid = False
+        state = 0               #starting state
         
         #if the top of the stack contains a space, pop it off
         while todo[0].isspace():
@@ -107,18 +131,18 @@ def lexer(todo):
             token = ''
             valid = True
             
-            #check for operator
+        #check for operator
         if check_operator(token) and valid == False:
             tokens.append('operator')
             lexemes.append(token)
             token = ''
             valid = True
 
+        #check for int and real
         while token and token[0].isdigit():
 #        while any(char.isdigit() for char in token):
-        #check for int
             if todo:
-                token += todo.popleft()             #getchar()
+                token += todo.popleft()                      #getchar()
             elif any(char == '.' for char in token):
                 tokens.append('real   ')
                 lexemes.append(token)
@@ -131,7 +155,6 @@ def lexer(todo):
                 break
             
             if fsm_digits(token, state) == 1:
- #               print('fsm_digits returns True')
                 todo.appendleft(token[-1])
                 token = token[:-1]
                 tokens.append('integer ')
@@ -145,14 +168,27 @@ def lexer(todo):
                 lexemes.append(token)
                 token = ''
 
-        state = 0   
+            continue            #return to the top of the loop
         
-#        print('Token: {}'.format(token))
-        #check for keyword
-        if check_keyword(token) and valid == False:
-           tokens.append('keyword')
-           lexemes.append(token)
-           token = ''
+        #check for identifier
+        while token and token[0].isalpha():
+            if todo:
+                token += todo.popleft()
+            else:
+                break
+        
+            if fsm_identifier(token, state) == 3:
+                todo.appendleft(token[-1])
+                token = token[:-1]
+                tokens.append('identifier')
+                lexemes.append(token)
+                token = ''
+
+            #check for keyword
+            if check_keyword(token) and valid == False:
+               tokens.append('keyword')
+               lexemes.append(token)
+               token = ''
 
         
 #        print('end: {}'.format(current))
