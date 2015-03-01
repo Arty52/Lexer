@@ -32,7 +32,7 @@ def fsm_digits(omega, state):
 #input: list of elements to process and current machine state
 #output: machine state value
 def fsm_identifier(omega, state):
-    table = [[1,0,0,3],
+    table = [[1,0,4,3],
              [1,2,2,3],
              [1,2,2,4],
              [3,3,3,3],
@@ -171,6 +171,7 @@ def lexer(todo):
             continue            #return to the top of the loop      
         
         #check for identifier
+#        while token and any(char.isalpha() for char in token):
         while token and token[0].isalpha():
             if todo:
                 token += todo.popleft()
@@ -200,10 +201,23 @@ def lexer(todo):
                 lexemes.append(token)
                 token = ''
 
+        #handle any unknowns that may have not hit            
+        while token: 
+            if todo:
+                token += todo.popleft()                 #getchar
+                if token[-1].isspace() or check_seperator(token) or check_operator(token):
+                    todo.appendleft(token[-1])          #backup
+                    token = token[:-1]        
+                    tokens.append('unknown')
+                    lexemes.append(token)
+                    token = ''
+            else:
+                break
+
     #if anything left over in token, append as unknown lexeme
     if token:
-          tokens.append('unknown')
-          lexemes.append(token)  
+        tokens.append('unknown')
+        lexemes.append(token)  
           
     print('Tokens Remains: {}'.format(token))
     print('{0:14}{1:1}'.format('Tokens', 'Lexemes'))
@@ -244,7 +258,7 @@ def process_file():
     #open file
 #    with open(sys.argv[1]) as fh:     #implicitly open and close the file from commandline
 #    with open(input('Enter file you would like to open: ')) as fh:
-    with open('sample3.txt') as fh:          #implicitly open and close the file
+    with open('testcase1.txt') as fh:          #implicitly open and close the file
         if (fh): 
             print('Open!')
             for i in fh:
