@@ -10,27 +10,7 @@ from collections import deque
            
 #dfs for real, int, ident
 
-# def fsm_int(omega):
-#     state = 0                           #starting state
-#     table = [[0,0,0,0,0,0,0,0,0,0,1],
-#              [1,1,1,1,1,1,1,1,1,1,1]]
-#
-#     for i in omega:
-#         if i.isdigit():
-# #            print('i is digit col = int(i): {}'.format(i))
-#             col = int(i)
-#         else:
-#             col = 10
-#         state = table[state][col]
-# #        print('new state: {}'.format(state))
-#
-#     if state == 0:
-#         return False
-#     else:
-#         return True
-
-def fsm_int(omega, state):
-#    state = 0                           #starting state
+def fsm_digits(omega, state):
     table = [[0,0,0,0,0,0,0,0,0,0,2,1],
              [1,1,1,1,1,1,1,1,1,1,1,1],
              [2,2,2,2,2,2,2,2,2,2,3,3],
@@ -38,14 +18,12 @@ def fsm_int(omega, state):
              
     for i in omega:
         if i.isdigit(): 
-#            print('i is digit col = int(i): {}'.format(i))
             col = int(i)
         elif i == '.':
             col = 10
         else:
             col = 11
         state = table[state][col]
-#        print('new state: {}'.format(state))
     
     return state        
 
@@ -135,43 +113,38 @@ def lexer(todo):
             lexemes.append(token)
             token = ''
             valid = True
-            
-# #        while token.isdigit():
-#         while any(char.isdigit for char in token):
-#         #check for int
-#             token += todo.popleft()             #getchar()
-#
-#             if fsm_int(token):
-#  #               print('fsm_int returns True')
-#                 todo.appendleft(token[-1])
-#                 token = token[:-1]
-#                 tokens.append('integer')
-#                 lexemes.append(token)
-#                 token = ''
-#                 valid = True
 
-#        while token.isdigit():  
-        while any(char.isdigit() for char in token):
+        while token and token[0].isdigit():
+#        while any(char.isdigit() for char in token):
         #check for int
-            print('token: {}'.format(token))
-    #        print('todo: {}'.format(todo))
-            token += todo.popleft()             #getchar()
+            if todo:
+                token += todo.popleft()             #getchar()
+            elif any(char == '.' for char in token):
+                tokens.append('real   ')
+                lexemes.append(token)
+                token = ''
+                break
+            else:
+                tokens.append('integer ')
+                lexemes.append(token)
+                token = ''
+                break
             
-            if fsm_int(token, state) == 1:
- #               print('fsm_int returns True')
+            if fsm_digits(token, state) == 1:
+ #               print('fsm_digits returns True')
                 todo.appendleft(token[-1])
                 token = token[:-1]
                 tokens.append('integer ')
                 lexemes.append(token)
                 token = ''
-                valid = True
-            elif fsm_int(token, state) == 3:
+
+            elif fsm_digits(token, state) == 3:
                 todo.appendleft(token[-1])
                 token = token[:-1]
                 tokens.append('real   ')
                 lexemes.append(token)
                 token = ''
-                valid = True
+
         state = 0   
         
 #        print('Token: {}'.format(token))
@@ -180,7 +153,7 @@ def lexer(todo):
            tokens.append('keyword')
            lexemes.append(token)
            token = ''
-           valid = True
+
         
 #        print('end: {}'.format(current))
     print('Tokens Remains: {}'.format(token))
@@ -194,24 +167,21 @@ def check_keyword(token):
    else:
        return False
     
-
+#input: token
+#output: true if single character separator, otherwise return false
 def check_operator(c):
     if c == '<' or c == '>' or c == '+' or c == '*' or c == '-' or c == '/' or c == '=':
         return True
     else:
         return False
 
-#input: character from todo
-#output:
+#input: token
+#output: true if single character separator, otherwise return false
 def check_seperator(c):
     if c == '(' or c == ')' or c == '{' or c == '}' or c == '[' or c == ']' or c == ':' or c == ';' or c == ',':
         return True
     else:
         return False
-
-#def check_operator():
-
-#def check_keywork():
 
 
 #process file and prepare list of characters to process
