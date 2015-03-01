@@ -168,35 +168,50 @@ def lexer(todo):
                 lexemes.append(token)
                 token = ''
 
-            continue            #return to the top of the loop
+            continue            #return to the top of the loop      
         
         #check for identifier
         while token and token[0].isalpha():
             if todo:
                 token += todo.popleft()
-            else:
+            elif any(char.isalpha() for char in token):
+                tokens.append('identifier')
+                lexemes.append(token)
+                token = ''
                 break
-        
+                
+            #check for keyword
+            if check_keyword(token) and valid == False:
+               tokens.append('keyword')
+               lexemes.append(token)
+               token = ''
+               
+            #identifier found
             if fsm_identifier(token, state) == 3:
                 todo.appendleft(token[-1])
                 token = token[:-1]
                 tokens.append('identifier')
                 lexemes.append(token)
                 token = ''
+            
+            #unknown token
+            if fsm_identifier(token, state) == 4:
+                tokens.append('unknown')
+                lexemes.append(token)
+                token = ''
 
-            #check for keyword
-            if check_keyword(token) and valid == False:
-               tokens.append('keyword')
-               lexemes.append(token)
-               token = ''
-
-        
-#        print('end: {}'.format(current))
+    #if anything left over in token, append as unknown lexeme
+    if token:
+          tokens.append('unknown')
+          lexemes.append(token)  
+          
     print('Tokens Remains: {}'.format(token))
-    print('{0:14}{1:8}'.format('Tokens', 'Lexemes'))
+    print('{0:14}{1:1}'.format('Tokens', 'Lexemes'))
     for i in range(len(tokens)):
-        print('{0:14}{1:8}'.format(tokens[i], lexemes[i]))
+        print('{0:14}{1:1}'.format(tokens[i], lexemes[i]))
 
+#input: a token
+#output: True if keyword hit, otherwise False
 def check_keyword(token):
    if token == 'int' or token == 'boolean' or token == 'real' or token == 'if' or token == 'else' or token == 'else' or token == 'endif' or token == 'while' or token == 'return' or token == 'read' or token == 'write' or token == 'true' or token == 'false' or token == 'function':
        return True
