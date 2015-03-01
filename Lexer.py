@@ -193,9 +193,9 @@ def lexer(todo):
         
 #        print('end: {}'.format(current))
     print('Tokens Remains: {}'.format(token))
-    print('Tokens      Lexemes')
+    print('{0:14}{1:8}'.format('Tokens', 'Lexemes'))
     for i in range(len(tokens)):
-        print('{}      {}'.format(tokens[i], lexemes[i]))
+        print('{0:14}{1:8}'.format(tokens[i], lexemes[i]))
 
 def check_keyword(token):
    if token == 'int' or token == 'boolean' or token == 'real' or token == 'if' or token == 'else' or token == 'else' or token == 'endif' or token == 'while' or token == 'return' or token == 'read' or token == 'write' or token == 'true' or token == 'false' or token == 'function':
