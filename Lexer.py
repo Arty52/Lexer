@@ -235,14 +235,34 @@ def lexer(todo):
     
     return tokens, lexemes
 
-def write_tokens_lexemes(tokens, lexemes):          
-  #  outputFileHandle = open('','w')
+def write_tokens_lexemes(tokens, lexemes, fh):          
+    
+    #print to screen
     print('{0:14}{1:1}'.format('Tokens', 'Lexemes'))
     print('{0:14}{1:1}'.format('------','-------'))
     for i in range(len(tokens)):
         print('{0:14}{1:1}'.format(tokens[i], lexemes[i]))
+        
+    #open file so that we can write to it. This will create a new file if DNE
+    outputFileHandle = open(outputFilename(fh),'w')
+        
+    #print to file
+    print('{0:14}{1:1}'.format('Tokens', 'Lexemes'), file = outputFileHandle)
+    print('{0:14}{1:1}'.format('------','-------'), file = outputFileHandle)
+    for i in range(len(tokens)):
+        print('{0:14}{1:1}'.format(tokens[i], lexemes[i]), file = outputFileHandle)
     
-    
+    #close file after writing to it
+    outputFileHandle.close()            
+
+#Purpose: to make an output file name from the initial user entered file
+def outputFilename(filename):
+    #example input is 'foo.txt'
+    #        output is 'foo-out.txt'
+    dotIndex = filename.find('.')      #find '.'
+    name = filename[:dotIndex]         #start at beginning and go to dotIndex
+    extension = '.RAT'
+    return name + extension    
 
 #input: a token
 #output: True if keyword hit, otherwise False
@@ -277,8 +297,9 @@ def process_file():
     todo = deque()    
     #open file
     #try and open file, if fail then give error and exit
+    user_file = input('Enter file you would like to open: ')
     try:
-        with open(input('Enter file you would like to open: ')) as fh:
+        with open(user_file) as fh:
      #   with open('testcase1.txt') as fh:          #implicitly open and close the file
             if (fh): 
                 print('File open!')
@@ -305,16 +326,16 @@ def process_file():
         print('Your file was not found!')
         print('')
         
-    return todo
+    return todo, user_file
 
 def main():
     tokens = []
     lexemes = []
     todo = []             #list of characters left to process
-    todo = process_file()
+    todo, user_fh = process_file()
     tokens, lexemes = lexer(todo)
     if tokens:
-        write_tokens_lexemes(tokens, lexemes)
+        write_tokens_lexemes(tokens, lexemes, user_fh)
 
 if __name__ == '__main__':
     main()
