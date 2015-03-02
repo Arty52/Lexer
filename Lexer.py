@@ -219,8 +219,8 @@ def lexer(todo):
         tokens.append('unknown')
         lexemes.append(token)  
           
-    print('Tokens Remains: {}'.format(token))
     print('{0:14}{1:1}'.format('Tokens', 'Lexemes'))
+    print('{0:14}{1:1}'.format('------','-------'))
     for i in range(len(tokens)):
         print('{0:14}{1:1}'.format(tokens[i], lexemes[i]))
 
@@ -256,30 +256,38 @@ def process_file():
     file = []
     todo = deque()    
     #open file
-#    with open(sys.argv[1]) as fh:     #implicitly open and close the file from commandline
-    with open(input('Enter file you would like to open: ')) as fh:
- #   with open('testcase1.txt') as fh:          #implicitly open and close the file
-        if (fh): 
-            print('Open!')
-            for i in fh:
-                line = i.strip()       #strip the 
-                file.append(line)
-#                print(line)            #DEBUG
-        else: 
-            print('Not found :-(')
+    #try and open file, if fail then give error and exit
+    try:
+        with open(input('Enter file you would like to open: ')) as fh:
+     #   with open('testcase1.txt') as fh:          #implicitly open and close the file
+            if (fh): 
+                print('File open!')
+                for i in fh:
+                    line = i.strip()       #strip the 
+                    file.append(line)
+    #                print(line)            #DEBUG
+            else: 
+                print('Not found :-(')
     
-    #for each element 
-    for i in file:
-        print(i)      #DEBUG
-        for j in i:
-            todo.append(j)
+        #print contents of file
+        print('')
+        print('Contents of file:')
+        for i in file:
+            print(i)      #DEBUG
+            for j in i:
+                todo.append(j)
+        print('')
     
+    except FileNotFoundError:
+        print('')
+        print('Your file was not found!')
+        print('')
+        
     return todo
 
 def main():
     todo = []             #list of characters left to process
     todo = process_file()
-    print(todo)
     lexer(todo)
 
 if __name__ == '__main__':
