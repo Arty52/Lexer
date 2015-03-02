@@ -7,10 +7,8 @@ import sys
 import queue
 import itertools, collections
 from collections import deque
-           
-#dfs for real, int, ident
 
-#input: list of elements to process and current machine state
+#input:  list of elements to process and current machine state
 #output: machine state value
 def fsm_digits(omega, state):
     table = [[0,0,0,0,0,0,0,0,0,0,2,1],
@@ -29,7 +27,7 @@ def fsm_digits(omega, state):
     
     return state        
 
-#input: list of elements to process and current machine state
+#input:  list of elements to process and current machine state
 #output: machine state value
 def fsm_identifier(omega, state):
     table = [[1,0,4,3],
@@ -51,7 +49,7 @@ def fsm_identifier(omega, state):
     
     return state     
     
-#input: list of elements to process and current machine state
+#input:  list of elements to process and current machine state
 #output: two lists, tokens and lexemes
 def lexer(todo):
     #from p46 of slides
@@ -75,13 +73,12 @@ def lexer(todo):
         
         #getchar and append it to token
         token += todo.popleft()             
-        
-        # if token == '/' and todo[0] == '*':
-        #     while not todo[0] == '*' and not todo[1] == '/':
-        #         todo.popleft()
 
         #handle two character operators
-        if todo:                                    #if todo not empty
+        #process 'todo' if there are characters in it. This is required because we need
+        # to peek at the next character in 'todo'. This code handles the special cases of
+        # operators and seporators (/*, */, :=, <=, =>, !=, @@).
+        if todo:                                   
             if token == ':' and todo[0] == '=':
                 tokens.append('operator')
                 lexemes.append(':=')
@@ -137,8 +134,7 @@ def lexer(todo):
                 token = ''
                 valid = True
         
-            #check for separator           
-    #        if check_seperator(todo[current]) and valid == False:
+        #check for separator           
         if check_seperator(token) and valid == False:
             tokens.append('separator')
             lexemes.append(token)
@@ -154,7 +150,6 @@ def lexer(todo):
 
         #check for int and real
         while token and token[0].isdigit():
-#        while any(char.isdigit() for char in token):
             if todo:
                 token += todo.popleft()                      #getchar()
             elif any(char == '.' for char in token):
@@ -235,6 +230,8 @@ def lexer(todo):
     
     return tokens, lexemes
 
+#input:  List of tokens, lexemes, and string of filehandle
+#output: None
 def write_tokens_lexemes(tokens, lexemes, fh):          
     
     #print to screen
@@ -257,15 +254,17 @@ def write_tokens_lexemes(tokens, lexemes, fh):
     outputFileHandle.close()            
 
 #Purpose: to make an output file name from the initial user entered file
+#input:  filename
+#output: filename with the proper extension
 def outputFilename(filename):
     #example input is 'foo.txt'
-    #        output is 'foo-out.txt'
+    #        output is 'foo.RAT'
     dotIndex = filename.find('.')      #find '.'
     name = filename[:dotIndex]         #start at beginning and go to dotIndex
     extension = '.RAT'
     return name + extension    
 
-#input: a token
+#input:  Token
 #output: True if keyword hit, otherwise False
 def check_keyword(token):
    if token == 'int' or token == 'boolean' or token == 'real' or token == 'if' or token == 'else' or token == 'else' or token == 'endif' or token == 'while' or token == 'return' or token == 'read' or token == 'write' or token == 'true' or token == 'false' or token == 'function':
@@ -273,16 +272,16 @@ def check_keyword(token):
    else:
        return False
     
-#input: token
-#output: true if single character separator, otherwise return false
+#input:  Token
+#output: True if single character separator, otherwise return false
 def check_operator(c):
     if c == '<' or c == '>' or c == '+' or c == '*' or c == '-' or c == '/' or c == '=':
         return True
     else:
         return False
 
-#input: token
-#output: true if single character separator, otherwise return false
+#input:  Token
+#output: True if single character separator, otherwise return false
 def check_seperator(c):
     if c == '(' or c == ')' or c == '{' or c == '}' or c == '[' or c == ']' or c == ':' or c == ';' or c == ',':
         return True
@@ -291,23 +290,22 @@ def check_seperator(c):
 
 
 #process file and prepare list of characters to process
-#input: none
+#input:  User's filename
 #output: List of characters that are in text file          
 def process_file(user_file):
     file = []
-    todo = deque()    
+    todo = deque()  
+      
     #open file
     #try and open file, if fail then give error and exit
-#    user_file = input('Enter file you would like to open: ')
     try:
         with open(user_file) as fh:
      #   with open('testcase1.txt') as fh:          #implicitly open and close the file
             if (fh): 
                 print('File open!')
                 for i in fh:
-                    line = i.strip()       #strip the 
+                    line = i.strip()       #removes leading and trailing characters (e.g. EOF)
                     file.append(line)
-    #                print(line)            #DEBUG
             else: 
                 print('Not found :-(')
     
@@ -316,7 +314,7 @@ def process_file(user_file):
         print('Contents of file:')
         print('-----------------')
         for i in file:
-            print(i)      #DEBUG
+            print(i)      
             for j in i:
                 todo.append(j)
         print('-----------------')
@@ -329,17 +327,25 @@ def process_file(user_file):
         
     return todo, user_file
 
+#Purpose: initilize necessary variables, run a loop which opens user .txt file and collects
+# lexemes and tokens from the file and prints them to terminal/file. Once user types 'quit'
+# the loop is broken and the program exits.
 def main():
-    tokens = []
-    lexemes = []
+    #initialize necessary variables
+    tokens = []           #will hold tokens
+    lexemes = []          #will hold lexemes
     todo = []             #list of characters left to process
-    user = ''
+    user = ''             #users filehandle or escape command (quit)
     
+    #run loop until user enters quit
     while True:
         user_file = input('Enter file you would like to open (type "quit" to exit): ')
         if user_file != 'quit':
             todo, user_fh = process_file(user_file)
             tokens, lexemes = lexer(todo)
+            
+            #if tokens/lexemes were processed, write to screen/file, otherwise file was
+            #not found therefore we dont have any tokens/lexemes to print
             if tokens:
                 write_tokens_lexemes(tokens, lexemes, user_fh)
         else:
