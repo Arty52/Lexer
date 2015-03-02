@@ -1,0 +1,30 @@
+@@
+
+function to_read(valid:boolean)
+{
+
+  if (tired){
+    return False; 
+  } else {
+    return True;	
+  }
+
+}
+
+@@
+
+@@
+
+int count,pages,books;
+real time;
+
+read(count, pages, books);
+
+while(count < pages)
+{  print(read_more);
+   print(ok_fine);
+   pages := +=count;
+   update(time);
+}
+
+@@

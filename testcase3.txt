@@ -1,0 +1,32 @@
+@@
+function greeting(type:string)
+{
+  if (type == 'hello')
+	{
+	  return : = 'Hi!';
+	}
+	else
+	{
+	  return  := 'rude';
+	}
+	}
+
+@@
+
+main():
+{
+  string speak := input(user);
+  boolean valid = true;
+
+  get(greeting);
+  while (greeting == 'rude')
+	{
+	  kick_and_run();
+	}
+  
+  if(tired)
+	{
+	  rest() 
+	}
+}
+@@

@@ -1,5 +1,5 @@
-while(fahr<upper)a:=23;
-_hello world banana { no }
-@@ while != int read := 7;
-&& @@ %%s5t4 4t a 99
-12314 51525 jjkla 123fsa ?
+while(fahr<celc):=15;
+_hello real world [ != ]
+@@ while != real temp := 2;
+&& @@ %%s5t4 4t e 221
+12345 b98765 jkjkjk 123jka ?

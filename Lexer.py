@@ -205,7 +205,7 @@ def lexer(todo):
         while token: 
             if todo:
                 token += todo.popleft()                 #getchar
-                if token[-1].isspace() or check_seperator(token) or check_operator(token):
+                if token[-1].isspace() or check_seperator(token[-1]) or check_operator(token[-1]):
                     todo.appendleft(token[-1])          #backup
                     token = token[:-1]        
                     tokens.append('unknown')
@@ -257,8 +257,8 @@ def process_file():
     todo = deque()    
     #open file
 #    with open(sys.argv[1]) as fh:     #implicitly open and close the file from commandline
-#    with open(input('Enter file you would like to open: ')) as fh:
-    with open('testcase1.txt') as fh:          #implicitly open and close the file
+    with open(input('Enter file you would like to open: ')) as fh:
+ #   with open('testcase1.txt') as fh:          #implicitly open and close the file
         if (fh): 
             print('Open!')
             for i in fh:
