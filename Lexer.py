@@ -125,6 +125,7 @@ def lexer(todo):
                 todo.popleft()
                 token = ''
                 valid = True
+                #pop off all code in between comments
                 while token != '*' and todo[0] != '/':
                     todo.popleft()
                 todo.appendleft('*')
@@ -234,11 +235,14 @@ def lexer(todo):
     
     return tokens, lexemes
 
-def print_tokens_lexemes(tokens, lexemes):          
+def write_tokens_lexemes(tokens, lexemes):          
+  #  outputFileHandle = open('','w')
     print('{0:14}{1:1}'.format('Tokens', 'Lexemes'))
     print('{0:14}{1:1}'.format('------','-------'))
     for i in range(len(tokens)):
         print('{0:14}{1:1}'.format(tokens[i], lexemes[i]))
+    
+    
 
 #input: a token
 #output: True if keyword hit, otherwise False
@@ -310,7 +314,7 @@ def main():
     todo = process_file()
     tokens, lexemes = lexer(todo)
     if tokens:
-        print_tokens_lexemes(tokens, lexemes)
+        write_tokens_lexemes(tokens, lexemes)
 
 if __name__ == '__main__':
     main()
