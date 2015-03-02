@@ -253,6 +253,7 @@ def write_tokens_lexemes(tokens, lexemes, fh):
         print('{0:14}{1:1}'.format(tokens[i], lexemes[i]), file = outputFileHandle)
     
     #close file after writing to it
+    print('Your Tokens and Lexemes have been saved as {} in the working directory.'.format(outputFilename(fh)))
     outputFileHandle.close()            
 
 #Purpose: to make an output file name from the initial user entered file
@@ -292,12 +293,12 @@ def check_seperator(c):
 #process file and prepare list of characters to process
 #input: none
 #output: List of characters that are in text file          
-def process_file():
+def process_file(user_file):
     file = []
     todo = deque()    
     #open file
     #try and open file, if fail then give error and exit
-    user_file = input('Enter file you would like to open: ')
+#    user_file = input('Enter file you would like to open: ')
     try:
         with open(user_file) as fh:
      #   with open('testcase1.txt') as fh:          #implicitly open and close the file
@@ -332,10 +333,17 @@ def main():
     tokens = []
     lexemes = []
     todo = []             #list of characters left to process
-    todo, user_fh = process_file()
-    tokens, lexemes = lexer(todo)
-    if tokens:
-        write_tokens_lexemes(tokens, lexemes, user_fh)
+    user = ''
+    
+    while True:
+        user_file = input('Enter file you would like to open (type "quit" to exit): ')
+        if user_file != 'quit':
+            todo, user_fh = process_file(user_file)
+            tokens, lexemes = lexer(todo)
+            if tokens:
+                write_tokens_lexemes(tokens, lexemes, user_fh)
+        else:
+            break
 
 if __name__ == '__main__':
     main()
