@@ -1,7 +1,5 @@
 Tokens        Lexemes
 ------        -------
-operator      /*
-operator      */
 keyword       function
 identifier    convert
 separator     [
@@ -35,8 +33,6 @@ identifier    high
 separator     ,
 identifier    step
 separator     ;
-operator      /*
-operator      */
 operator      @@
 keyword       read
 separator     (

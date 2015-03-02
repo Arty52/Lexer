@@ -77,7 +77,7 @@ def lexer(todo):
         #handle two character operators
         #process 'todo' if there are characters in it. This is required because we need
         # to peek at the next character in 'todo'. This code handles the special cases of
-        # operators and seporators (/*, */, :=, <=, =>, !=, @@).
+        # operators and seporators (:=, <=, =>, !=, @@).
         if todo:                                   
             if token == ':' and todo[0] == '=':
                 tokens.append('operator')
@@ -115,10 +115,8 @@ def lexer(todo):
                 token = ''
                 valid = True
 
-            #handle comments in code
+            #handle comments in code, /* and */ characters are also destroyed
             if token == '/' and todo[0] == '*':
-                tokens.append('operator')
-                lexemes.append('/*')
                 todo.popleft()
                 token = ''
                 valid = True
@@ -128,8 +126,6 @@ def lexer(todo):
                 todo.appendleft('*')
 
             if token == '*' and todo[0] == '/':
-                tokens.append('operator')
-                lexemes.append('*/')
                 todo.popleft()
                 token = ''
                 valid = True
