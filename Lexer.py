@@ -59,8 +59,13 @@ def lexer(todo):
     lexemes = []
     token = ''
     
+    #if given a file with no todo, exit lexer
+    if len(todo) == 0:
+        return tokens, lexemes
+    
+    
+    #loop continues until all characters in 'todo' are processed
     while len(todo) > 0:
-#    for current in range(len(todo)):
         valid = False
         state = 0               #starting state
         
@@ -68,9 +73,13 @@ def lexer(todo):
         while todo[0].isspace():
             todo.popleft()
         
-        token += todo.popleft()
+        #getchar and append it to token
+        token += todo.popleft()             
         
-#        print('beginning: {}'.format(current))
+        # if token == '/' and todo[0] == '*':
+        #     while not todo[0] == '*' and not todo[1] == '/':
+        #         todo.popleft()
+
         #handle two character operators
         if todo:                                    #if todo not empty
             if token == ':' and todo[0] == '=':
@@ -101,7 +110,7 @@ def lexer(todo):
                 token = ''
                 valid = True
         
-        #handle two character separators
+            #handle two character separators
             if token == '@' and todo[0] == '@':
                 tokens.append('operator')
                 lexemes.append('@@')
@@ -109,12 +118,16 @@ def lexer(todo):
                 token = ''
                 valid = True
 
+            #handle comments in code
             if token == '/' and todo[0] == '*':
                 tokens.append('operator')
                 lexemes.append('/*')
                 todo.popleft()
                 token = ''
                 valid = True
+                while token != '*' and todo[0] != '/':
+                    todo.popleft()
+                todo.appendleft('*')
 
             if token == '*' and todo[0] == '/':
                 tokens.append('operator')
@@ -218,7 +231,10 @@ def lexer(todo):
     if token:
         tokens.append('unknown')
         lexemes.append(token)  
-          
+    
+    return tokens, lexemes
+
+def print_tokens_lexemes(tokens, lexemes):          
     print('{0:14}{1:1}'.format('Tokens', 'Lexemes'))
     print('{0:14}{1:1}'.format('------','-------'))
     for i in range(len(tokens)):
@@ -272,10 +288,12 @@ def process_file():
         #print contents of file
         print('')
         print('Contents of file:')
+        print('-----------------')
         for i in file:
             print(i)      #DEBUG
             for j in i:
                 todo.append(j)
+        print('-----------------')
         print('')
     
     except FileNotFoundError:
@@ -286,9 +304,13 @@ def process_file():
     return todo
 
 def main():
+    tokens = []
+    lexemes = []
     todo = []             #list of characters left to process
     todo = process_file()
-    lexer(todo)
+    tokens, lexemes = lexer(todo)
+    if tokens:
+        print_tokens_lexemes(tokens, lexemes)
 
 if __name__ == '__main__':
     main()

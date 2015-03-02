@@ -1,30 +1,22 @@
-@@
+/* this is comment for this sample code which
+converts Fahrenheit into Celcius*/ 
 
-function to_read(valid:boolean)
+function convert[fahr:int]
 {
 
-  if (tired){
-    return False; 
-  } else {
-    return True;	
+  if (tired)
+  {
+    return 5*(fahr-32)/9;
   }
 
+@@
+ int low,high,step; /*decalrations*/
+
+@@
+read(low,high,step);
+while(low<high)
+{
+  write(low);
+  write(convert[low]);
+  low:=low+step;
 }
-
-@@
-
-@@
-
-int count,pages,books;
-real time;
-
-read(count, pages, books);
-
-while(count < pages)
-{  print(read_more);
-   print(ok_fine);
-   pages := +=count;
-   update(time);
-}
-
-@@
