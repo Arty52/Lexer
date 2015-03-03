@@ -1,5 +1,5 @@
 while(fahr<celc):=15;
 _hello real world [ != ]
 @@ while != real temp := 2.2;
-&& @@ %%s5t4 4t e 221
+&& @@ %%s5t4 4 e:
 12345 b98765 jkjkjk 123jka ?

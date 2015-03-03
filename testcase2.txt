@@ -12,6 +12,7 @@ function convert[fahr:int]
 @@
  int low,high,step; /*decalrations*/
 
+
 @@
 read(low,high,step);
 while(low<high)

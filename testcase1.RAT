@@ -27,9 +27,9 @@ unknown       &&
 operator      @@
 unknown       %%s5t4
 integer       4
-identifier    t
 identifier    e
-integer       22112345
+separator     :
+integer       12345
 unknown       b98765 
 identifier    jkjkjk
 integer       123

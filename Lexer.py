@@ -52,7 +52,6 @@ def fsm_identifier(omega, state):
 #input:  list of elements to process and current machine state
 #output: two lists, tokens and lexemes
 def lexer(todo):
-    #from p46 of slides
     tokens = []
     lexemes = []
     token = ''
@@ -131,7 +130,7 @@ def lexer(todo):
                 valid = True
         
         #check for separator           
-        if check_seperator(token) and valid == False:
+        if check_separator(token) and valid == False:
             tokens.append('separator')
             lexemes.append(token)
             token = ''
@@ -210,7 +209,7 @@ def lexer(todo):
         while token: 
             if todo:
                 token += todo.popleft()                 #getchar
-                if token[-1].isspace() or check_seperator(token[-1]) or check_operator(token[-1]):
+                if token[-1].isspace() or check_separator(token[-1]) or check_operator(token[-1]):
                     todo.appendleft(token[-1])          #backup
                     token = token[:-1]        
                     tokens.append('unknown')
@@ -263,7 +262,7 @@ def outputFilename(filename):
 #input:  Token
 #output: True if keyword hit, otherwise False
 def check_keyword(token):
-   if token == 'int' or token == 'boolean' or token == 'real' or token == 'if' or token == 'else' or token == 'else' or token == 'endif' or token == 'while' or token == 'return' or token == 'read' or token == 'write' or token == 'true' or token == 'false' or token == 'function':
+   if token == 'int' or token == 'boolean' or token == 'real' or token == 'if' or token == 'else' or token == 'endif' or token == 'while' or token == 'return' or token == 'read' or token == 'write' or token == 'true' or token == 'false' or token == 'function':
        return True
    else:
        return False
@@ -278,7 +277,7 @@ def check_operator(c):
 
 #input:  Token
 #output: True if single character separator, otherwise return false
-def check_seperator(c):
+def check_separator(c):
     if c == '(' or c == ')' or c == '{' or c == '}' or c == '[' or c == ']' or c == ':' or c == ';' or c == ',':
         return True
     else:
