@@ -39,7 +39,7 @@ def fsm_digits(omega, state):
 def fsm_identifier(omega, state):
     table = [[1,0,4,3],
              [1,1,2,3],
-             [1,2,2,4],
+             [1,1,2,4],
              [3,3,3,3],
              [4,4,4,4]]
              
@@ -75,6 +75,8 @@ def lexer(todo):
         #if the top of the stack contains a space, pop it off
         while todo[0].isspace():
             todo.popleft()
+            if not todo: break              #needed for pop, else out of bound if last char in todo
+        if not todo: break
         
         #getchar and append it to token
         token += todo.popleft()             
@@ -305,10 +307,11 @@ def process_file(user_file):
             if (fh): 
                 print('File open!')
                 for i in fh:
-                    line = i.rstrip()       #removes leading and trailing characters (e.g. EOF)
+                    line = i
+#                    line = i.rstrip()       #removes leading and trailing characters (e.g. EOF)
                     file.append(line)
             else: 
-                print('Not found :-(')
+                print('File empty')
     
         #print contents of file
         print('')
@@ -317,7 +320,10 @@ def process_file(user_file):
         for i in file:
             print(i)      
             for j in i:
-                todo.append(j)
+                if j == '\n':
+                    todo.append(' ')
+                else:
+                    todo.append(j)
         print('-----------------')
         print('')
     
@@ -344,7 +350,6 @@ def main():
         user_file = input('Enter file you would like to open (type "quit" to exit): ')
         if user_file != 'quit':
             todo, user_fh = process_file(user_file)
-            print(todo)
             tokens, lexemes = lexer(todo)
             
             #if tokens/lexemes were processed, write to screen/file, otherwise file was

@@ -1,0 +1,15 @@
+Tokens        Lexemes
+------        -------
+identifier    stuff
+keyword       while
+separator     (
+separator     [
+operator      :=
+separator     ]
+separator     )
+identifier    xyz___1
+integer       12
+real          1.34
+keyword       if
+identifier    xy56
+identifier    result

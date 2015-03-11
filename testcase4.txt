@@ -1,0 +1,4 @@
+stuff while([:=])
+xyz___1 12 1.34
+if xy56
+result
