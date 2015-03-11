@@ -30,7 +30,7 @@ integer       4
 identifier    e
 separator     :
 integer       12345
-unknown       b98765 
+identifier    b98765
 identifier    jkjkjk
 integer       123
 identifier    jka

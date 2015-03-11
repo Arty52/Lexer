@@ -8,6 +8,7 @@ separator     :
 keyword       int
 separator     ]
 separator     {
+identifier    stuff123
 keyword       if
 separator     (
 identifier    tired

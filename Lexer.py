@@ -8,6 +8,13 @@ import queue
 import itertools, collections
 from collections import deque
 
+#Class that holds the token and corresponding lexeme
+#TODO
+class Lex:
+    def __init__(self, token, lexeme):
+        self.token = token
+        self.lexeme = lexeme
+
 #input:  list of elements to process and current machine state
 #output: machine state value
 def fsm_digits(omega, state):
@@ -31,7 +38,7 @@ def fsm_digits(omega, state):
 #output: machine state value
 def fsm_identifier(omega, state):
     table = [[1,0,4,3],
-             [1,2,2,3],
+             [1,1,2,3],
              [1,2,2,4],
              [3,3,3,3],
              [4,4,4,4]]
@@ -59,7 +66,6 @@ def lexer(todo):
     #if given a file with no todo, exit lexer
     if len(todo) == 0:
         return tokens, lexemes
-    
     
     #loop continues until all characters in 'todo' are processed
     while len(todo) > 0:
@@ -299,7 +305,7 @@ def process_file(user_file):
             if (fh): 
                 print('File open!')
                 for i in fh:
-                    line = i.strip()       #removes leading and trailing characters (e.g. EOF)
+                    line = i.rstrip()       #removes leading and trailing characters (e.g. EOF)
                     file.append(line)
             else: 
                 print('Not found :-(')
@@ -332,11 +338,13 @@ def main():
     todo = []             #list of characters left to process
     user = ''             #users filehandle or escape command (quit)
     
+    
     #run loop until user enters quit
     while True:
         user_file = input('Enter file you would like to open (type "quit" to exit): ')
         if user_file != 'quit':
             todo, user_fh = process_file(user_file)
+            print(todo)
             tokens, lexemes = lexer(todo)
             
             #if tokens/lexemes were processed, write to screen/file, otherwise file was

@@ -3,7 +3,8 @@ converts Fahrenheit into Celcius*/
 
 function convert[fahr:int]
 {
-
+stuff
+123
   if (tired)
   {
     return 5*(fahr-32)/9;
